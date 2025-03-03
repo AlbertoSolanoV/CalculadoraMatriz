@@ -3,140 +3,159 @@ import java.util.*;
 
 public class Main {
 
-    // Function to print Matrix
-    static void printMatrix(int M[][], int rowSize,
-                            int colSize)
-    {
-        for (int i = 0; i < rowSize; i++) {
-            for (int j = 0; j < colSize; j++)
-                System.out.print(M[i][j] + " ");
-
-            System.out.println();
-        }
-    }
-
-    // Funcion para multiplicacion
-    static void multiplyMatrix(int row1, int col1,
-                               int A[][], int row2,
-                               int col2, int B[][])
-    {
-        int i, j, k;
-
-        // Check if multiplication is Possible
-        if (row2 != col1) {
-
-            System.out.println("No se puede realizar la multiplicacion");
-            return;
-        }
-
-        // Matrix to store the result
-        // The product matrix will
-        // be of size row1 x col2
-        int C[][] = new int[row1][col2];
-
-        // Multiply the two matrices
-        for (i = 0; i < row1; i++) {
-            for (j = 0; j < col2; j++) {
-                for (k = 0; k < row2; k++)
-                    C[i][j] += A[i][k] * B[k][j];
-            }
-        }
-
-        // Print the result
-        System.out.println("Resultado de la multiplicacion:");
-        printMatrix(C, row1, col2);
-    }
-
-    //Funcion para suma
-    static void sumMatrix(int filas,  int columnas, int matrizA[][], int matrizB[][]){
-
-            // Creamos la matriz para almacenar la suma
-            int[][] matrizSuma; // Declaración sin inicializar tamaño
-
-            matrizSuma = new int[filas][columnas];
-
-            // Recorremos las matrices y sumamos elemento a elemento
-            for (int i = 0; i < matrizA.length; i++) { // Filas
-                for (int j = 0; j < matrizA[i].length; j++) { // Columnas
-                    matrizSuma[i][j] = matrizA[i][j] + matrizB[i][j];
-                }
-            }
-
-            // Imprimimos la matriz resultante
-            System.out.println("Matriz Resultado de Suma:");
-            printMatrix(matrizSuma,filas, columnas);
-
-    }
-
-    //Funcion para suma
-    static void subMatrix(int filas, int columnas, int matrizA[][], int matrizB[][]){
-
-        // Creamos la matriz para almacenar la resta
-        int[][] matrizResta; // Declaración sin inicializar tamaño
-
-        // Inicializar la matriz con un tamaño específico en tiempo de ejecución
-        matrizResta = new int[filas][columnas];
-
-        // Recorremos las matrices y restamos elemento a elemento
-        for (int i = 0; i < matrizA.length; i++) { // Filas
-            for (int j = 0; j < matrizA[i].length; j++) { // Columnas
-                matrizResta[i][j] = matrizA[i][j] - matrizB[i][j];
-            }
-        }
-
-        // Imprimimos la matriz resultante
-        System.out.println("Matriz Resultado de Resta:");
-        printMatrix(matrizResta,filas, columnas);
-
-    }
-
-    static int getRow(int matriz[][]){
-        return matriz.length;
-    }
-    static int getColumn(int matriz[][]){
-        return matriz[0].length;
-    }
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int[][] matrizA = null;
+        int[][] matrizB = null;
 
-        // Definimos dos matrices de 3x3
-        int[][] matrizA = {
-                {1, -2, 3},
-                {4, 5, 6},
-                {4, 5, 6},
+        while (true) {
+            System.out.println("\nSeleccione una opción:");
+            System.out.println("1. Ingresar matrices manualmente");
+            System.out.println("2. Sumar matrices");
+            System.out.println("3. Restar matrices");
+            System.out.println("4. Multiplicar matrices");
+            System.out.println("5. Multiplicar por escalar");
+            System.out.println("6. Calcular la inversa de una matriz (Gauss-Jordan)");
+            System.out.println("7. Calcular determinante de una matriz");
+            System.out.println("8. Resolver sistema de ecuaciones (Regla de Cramer)");
+            System.out.println("9. Salir");
+            System.out.print("Opción: ");
 
-        };
+            int opcion = scanner.nextInt();
 
-        int[][] matrizB = {
-                {9, 8, 7},
-                {6, 5, 4},
-                {6, 5, 4}
-        };
+            switch (opcion) {
+                case 1:
+                    System.out.println("\nIngrese las dimensiones de la matriz A:");
+                    System.out.print("Filas: ");
+                    int filasA = scanner.nextInt();
+                    System.out.print("Columnas: ");
+                    int columnasA = scanner.nextInt();
+                    matrizA = MatrixUtils.inputMatrix(filasA, columnasA, scanner);
 
-        //Obtenemos las dimensiones de las matrices
-        int filasMatrizA = getRow(matrizA);
-        int columnasMatrizA = getColumn(matrizA);
+                    System.out.println("\nIngrese las dimensiones de la matriz B:");
+                    System.out.print("Filas: ");
+                    int filasB = scanner.nextInt();
+                    System.out.print("Columnas: ");
+                    int columnasB = scanner.nextInt();
+                    matrizB = MatrixUtils.inputMatrix(filasB, columnasB, scanner);
 
-        //Obtenemos las dimensiones de las matrices
-        int filasMatrizB = getRow(matrizB);
-        int columnasMatrizB = getColumn(matrizB);
+                    System.out.println("\nMatriz A:");
+                    MatrixUtils.printMatrix(matrizA);
 
-        // Imprimir matriz A
-        System.out.println("Matriz A");
-        printMatrix(matrizA, filasMatrizA, columnasMatrizA);
+                    System.out.println("\nMatriz B:");
+                    MatrixUtils.printMatrix(matrizB);
+                    break;
 
-        // Imprimir matriz B
-        System.out.println("Matriz B");
-        printMatrix(matrizB, filasMatrizB, columnasMatrizB);
+                case 2:
+                    if (MatrixUtils.validarSumaResta(matrizA, matrizB)) {
+                        MatrixOperations.sumMatrix(matrizA, matrizB);
+                    }
+                    break;
 
-        if(filasMatrizA == filasMatrizB && columnasMatrizA == columnasMatrizB) {
-            sumMatrix(filasMatrizA, filasMatrizA,matrizA,matrizB);
-            subMatrix(filasMatrizA, filasMatrizA,matrizA,matrizB);
-        }else{
-            System.out.println("No se puede hacer suma y resta, las matrices tienen que ser cuadraticas");
+                case 3:
+                    if (MatrixUtils.validarSumaResta(matrizA, matrizB)) {
+                        MatrixOperations.subMatrix(matrizA, matrizB);
+                    }
+                    break;
+
+                case 4:
+                    if (MatrixUtils.validarMultiplicacion(matrizA, matrizB)) {
+                        MatrixOperations.multiplyMatrix(matrizA, matrizB);
+                    }
+                    break;
+                case 5:
+                    System.out.println("\nSeleccione la matriz a multiplicar (A o B): ");
+                    char matrizSeleccionada = scanner.next().toUpperCase().charAt(0);
+
+                    System.out.print("Ingrese el número por el cual multiplicar la matriz: ");
+                    int escalar = scanner.nextInt();
+
+                    if (matrizSeleccionada == 'A') {
+                        if(MatrixUtils.validarMultiplicarPorEscalar(matrizA)){
+                            matrizA = MatrixOperations.multiplicarPorEscalar(matrizA, escalar);
+                            System.out.println("\nResultado de A * " + escalar + ":");
+                            MatrixUtils.printMatrix(matrizA);
+                        }
+                    } else if (matrizSeleccionada == 'B') {
+                        if(MatrixUtils.validarMultiplicarPorEscalar(matrizB)) {
+                            matrizB = MatrixOperations.multiplicarPorEscalar(matrizB, escalar);
+                            System.out.println("\nResultado de B * " + escalar + ":");
+                            MatrixUtils.printMatrix(matrizB);
+                        }
+                    } else {
+                        System.out.println("Selección inválida.");
+                    }
+                    break;
+                case 6:
+                    System.out.println("\nSeleccione la matriz a calcular la inversa (A o B): ");
+                    matrizSeleccionada = scanner.next().toUpperCase().charAt(0);
+                    double[][] resultado;
+                    if (matrizSeleccionada == 'A') {
+                        resultado = MatrixOperations.calcularInversa(matrizA);
+                    } else if (matrizSeleccionada == 'B') {
+                        resultado = MatrixOperations.calcularInversa(matrizB);
+                    } else {
+                        System.out.println("Selección inválida.");
+                        break;
+                    }
+
+                    if (resultado != null) {
+                        System.out.println("\nMatriz Inversa:");
+                        MatrixUtils.printMatrixAsFraction(resultado);
+                    } else {
+                        System.out.println("No se pudo calcular la inversa.");
+                    }
+                    break;
+                case 7:
+                    System.out.println("\nSeleccione la matriz a calcular el determinante (A o B): ");
+                    matrizSeleccionada = scanner.next().toUpperCase().charAt(0);
+                    double resultadoDet;
+                    if (matrizSeleccionada == 'A') {
+                        resultadoDet = MatrixOperations.calcularDeterminante(matrizA);
+                    } else if (matrizSeleccionada == 'B') {
+                        resultadoDet = MatrixOperations.calcularDeterminante(matrizB);
+                    } else {
+                        System.out.println("Selección inválida.");
+                        break;
+                    }
+
+                    if (Double.isNaN(resultadoDet)) {
+                        System.out.println("No se pudo calcular el determinante.");
+                    } else {
+                        System.out.print("\nDeterminante:");
+                        System.out.println(resultadoDet);
+                    }
+                    break;
+                case 8:
+                    System.out.println("\nIngrese el número de ecuaciones (y variables): ");
+                    int n = scanner.nextInt();
+
+                    System.out.println("Ingrese la matriz de coeficientes:");
+                    int[][] coeficientes = MatrixUtils.inputMatrix(n, n, scanner);
+
+                    System.out.println("Ingrese el vector de términos independientes:");
+                    int[][] resultados = MatrixUtils.inputMatrix(n, 1, scanner);
+
+                    double[] solucion = MatrixOperations.resolverSistemaCramer(coeficientes, resultados);
+
+                    if (solucion != null) {
+                        System.out.println("\nSolución del sistema:");
+                        for (int i = 0; i < solucion.length; i++) {
+                            System.out.println("x" + (i + 1) + " = " + solucion[i]);
+                        }
+                    } else {
+                        System.out.println("No se pudo resolver el sistema.");
+                    }
+                    break;
+
+                case 9:
+                    System.out.println("Saliendo del programa...");
+                    scanner.close();
+                    return;
+
+                default:
+                    System.out.println("Opción no válida, intenta nuevamente.");
+            }
         }
-
-        //Para multiplicar
-        multiplyMatrix(filasMatrizA, columnasMatrizA, matrizA, filasMatrizB,columnasMatrizB, matrizB);
-
     }
 }
